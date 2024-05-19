@@ -1,36 +1,46 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, ScrollView} from 'react-native';
+import { DrawerActions } from '@react-navigation/native';
+import { StyleSheet, View, ScrollView, SafeAreaView, Pressable } from 'react-native';
 
-import TopBar from '../components/TopBar';
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+
 import CardAbastecimento from '../components/CardAbastecimento';
 import AddButton from '../components/AddButton';
 
-const telaAbastecimento = "Abastecimentos"
+export default function AbastecimentosScreen({ navigation }) {
 
-export default function AbastecimentosScreen() {
+  const openDrawer = () => navigation.dispatch(DrawerActions.openDrawer());
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: (props) => (
+        <FontAwesome5 name="gas-pump" size={32}/>
+      ),
+      headerLeft: (props) => (
+        <Pressable  {...props} onPress={openDrawer}>
+              <FontAwesome5 name="bars" size={32}></FontAwesome5>
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
-      <View>
-        <TopBar style={styles.topMenu} CentralText={ telaAbastecimento } ></TopBar>
-            <ScrollView>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
-              <CardAbastecimento></CardAbastecimento>
+            <ScrollView style={{width:"100%"}}>
+              <CardAbastecimento/>
+              <CardAbastecimento/>
+              <CardAbastecimento/>
+              <CardAbastecimento/>
+              <CardAbastecimento/>
+              <CardAbastecimento/>
+              <CardAbastecimento/>
             </ScrollView>
-      </View>
+
       <View style={styles.button}>
         <AddButton></AddButton>
       </View>
-      <StatusBar style="auto" />
+      <StatusBar style="auto"/>
     </View>
   )
 }
@@ -41,7 +51,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#F6F6F6',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingTop: 40,
+      width: "100%",
+      height: "100%",
     },
     topMenu: {
       width: "100%",
