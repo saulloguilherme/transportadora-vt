@@ -1,12 +1,10 @@
 import React from 'react'
 import { Text, View, Pressable, StyleSheet, ScrollView, StatusBar } from 'react-native';
-import { DrawerActions } from '@react-navigation/native';
+import { DrawerActions, StackActions } from '@react-navigation/native';
 
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import CardFrete from '../components/CardFrete';
 import AddButton from '../components/AddButton';
-
-
 
 export default function FretesScreen({ navigation }) {
 
@@ -25,6 +23,10 @@ export default function FretesScreen({ navigation }) {
     });
   }, [navigation]);
 
+  function toForm() {
+    navigation.dispatch(StackActions.push('FreteForm'))
+  }
+
   return (
   <View style={styles.container}>
   <ScrollView style={{width:"100%"}}>
@@ -39,7 +41,7 @@ export default function FretesScreen({ navigation }) {
   </ScrollView>
 
   <View style={styles.button}>
-    <AddButton/>
+    <AddButton navegar={toForm}/>
   </View>
   <StatusBar style="auto" />
 </View>

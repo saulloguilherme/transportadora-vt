@@ -1,10 +1,10 @@
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
 
-export default function AddButton() {
+export default function AddButton({ navegar }) {
   return (
     <View>
-        <Pressable style={styles.button} onPress={()=>alert('A')}>
+        <Pressable style={styles.button} onPress={navegar}>
           <FontAwesome5 name="plus" size={36} color="black" />
         </Pressable>
     </View>

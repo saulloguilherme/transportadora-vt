@@ -1,9 +1,9 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { DrawerActions } from '@react-navigation/native';
-import { StyleSheet, View, ScrollView, SafeAreaView, Pressable } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView, Pressable, Text } from 'react-native';
+import { DrawerActions, StackActions } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 import CardAbastecimento from '../components/CardAbastecimento';
 import AddButton from '../components/AddButton';
@@ -11,7 +11,6 @@ import AddButton from '../components/AddButton';
 export default function AbastecimentosScreen({ navigation }) {
 
   const openDrawer = () => navigation.dispatch(DrawerActions.openDrawer());
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: (props) => (
@@ -25,20 +24,24 @@ export default function AbastecimentosScreen({ navigation }) {
     });
   }, [navigation]);
 
+  function toForm() {
+    navigation.dispatch(StackActions.push('AbastecimentoForm'))
+  }
+
   return (
     <View style={styles.container}>
-            <ScrollView style={{width:"100%"}}>
-              <CardAbastecimento/>
-              <CardAbastecimento/>
-              <CardAbastecimento/>
-              <CardAbastecimento/>
-              <CardAbastecimento/>
-              <CardAbastecimento/>
-              <CardAbastecimento/>
-            </ScrollView>
+      <ScrollView style={{width:"100%"}}>
+        <CardAbastecimento/>
+        <CardAbastecimento/>
+        <CardAbastecimento/>
+        <CardAbastecimento/>
+        <CardAbastecimento/>
+        <CardAbastecimento/>
+        <CardAbastecimento/>
+      </ScrollView>
 
       <View style={styles.button}>
-        <AddButton></AddButton>
+          <AddButton navegar={toForm}></AddButton>
       </View>
       <StatusBar style="auto"/>
     </View>
@@ -53,11 +56,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       width: "100%",
       height: "100%",
-    },
-    topMenu: {
-      width: "100%",
-      position: "absolute",
-      top: "0%",
     },
     button: {
       paddingBottom: 40,
