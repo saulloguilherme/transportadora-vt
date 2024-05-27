@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
-import { View, Text, Pressable, TextInput, StyleSheet, Keyboard, FlatList, Button } from 'react-native'
+import { View, Text, Pressable, TextInput, StyleSheet, Keyboard, FlatList, Button, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { StackActions } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import TextInputField from '../components/TextInputField';
+import RadioComponent from '../components/RadioTwoOptions';
+import RadioTwoOptions from '../components/RadioTwoOptions';
+import NumericalInputField from '../components/NumericalInputField';
 
 
 export default function AbastecimentoForm({ navigation }) {
@@ -62,19 +65,44 @@ export default function AbastecimentoForm({ navigation }) {
     { id: 5, name: "Carlos Pereira" },
   ];
 
-  const [placa, setSelectedPlaca] = useState('')
-  const [posto, setSelectedPosto] = useState('')
-  const [autorizante, setSelectedAutorizante] = useState('')
+  const [placa, setSelectedPlaca] = useState('');
+  const [validPlaca, setValidPlaca] = useState(false);
+
+  const [posto, setSelectedPosto] = useState('');
+  const [validPosto, setValidPosto] = useState(false);
+
+  const [autorizante, setSelectedAutorizante] = useState('');
+  const [validAutorizante, setValidAutorizante] = useState(false);
+
+  const [dieselArla, setSelectedDieselArla] = useState('Somente Diesel');
+  const variacoes = ["Somente Diesel", "Diesel e Arla"]
+  const [validDieselArla, setValidDieselArla] = useState(false);
+
+  const [diesel, setSelectedDiesel] = useState();
+  const [validDiesel, setValidDiesel] = useState(false);
+
+  const [arla, setSelectedArla] = useState();
+  const [validArla, setValidArla] = useState(false);
+
+  function allSelected() {
+    return validPlaca && validPosto && validAutorizante && validDieselArla && validDiesel && (dieselArla == variacoes[1] ? validArla : true);
+  };
 
   return (
+  <KeyboardAvoidingView behavior={"position"} enabled={() => {return false;}}>
     <View style={style.containter} onTouchStart={() => Keyboard.dismiss()}>
-      <TextInputField placeholder={"Digite a placa do veículo"} objectList={abastecimentoList} column={"placa"} setSelectedVariable={setSelectedPlaca}></TextInputField>
-      <TextInputField placeholder={"Digite o nome do posto"} objectList={abastecimentoList} column={"posto"} setSelectedVariable={setSelectedPosto}></TextInputField>
-      <TextInputField placeholder={"Digite o autorizante do registro"} objectList={abastecimentoList} column={"autorizante"} setSelectedVariable={setSelectedAutorizante}></TextInputField>
-      <Pressable style={style.enviar} /* TODO: listener observando campos para mudar a cor do botão caso não estejam preenchidos */> 
-        <Text style={{ fontWeight: 'bold', fontSize: 20}}>Enviar</Text>  
+      <Text>{placa}{posto}{autorizante}{dieselArla}</Text>
+      <TextInputField placeholder={"Digite a placa do veículo"} objectList={abastecimentoList} column={"placa"} setSelectedVariable={setSelectedPlaca} setValidVariable={setValidPlaca}></TextInputField>
+      <TextInputField placeholder={"Digite o nome do posto"} objectList={abastecimentoList} column={"posto"} setSelectedVariable={setSelectedPosto} setValidVariable={setValidPosto}></TextInputField>
+      <TextInputField placeholder={"Digite o autorizante do registro"} objectList={abastecimentoList} column={"autorizante"} setSelectedVariable={setSelectedAutorizante} setValidVariable={setValidAutorizante}></TextInputField>
+      <RadioTwoOptions options={variacoes} setSelectedVariable={setSelectedDieselArla} setValidVariable={setValidDieselArla}></RadioTwoOptions>
+      <NumericalInputField placeholder={"Diesel"} variable={diesel} setSelectedVariable={setSelectedDiesel} setValidVariable={setValidDiesel}></NumericalInputField>
+      {dieselArla == variacoes[1] ? <NumericalInputField placeholder={"Arla"} variable={arla} setSelectedVariable={setSelectedArla} setValidVariable={setValidArla}></NumericalInputField> : null} 
+      <Pressable style={[style.enviar, allSelected() ? style.preenchido : style.nao_preenchido ]}> 
+        <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Enviar</Text>  
       </Pressable>
     </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -88,12 +116,19 @@ const style = StyleSheet.create({
     width: "90%",
     height: 60,
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    alignSelf: 'center',
+    alignSelf: 'center',  
     margin: 10,
     justifyContent: 'center',
     borderWidth: 1,
     position: "absolute",
-    bottom: "3%",
+    bottom: "0%",
   },
+  preenchido: {
+    opacity: 1,
+    backgroundColor: "#ffffff",
+  },
+  nao_preenchido: {
+    backgroundColor: "#ffffff",
+    opacity: 0.4,
+  }
 })
