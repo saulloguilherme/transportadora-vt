@@ -4,7 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 
 export default function RadioTwoOptions({ options, setSelectedVariable, setValidVariable }) {
   
-  const [option1, setOption1] = useState(false);
+  const [option1, setOption1] = useState(true);
   const [option2, setOption2] = useState(false);
 
   const Icon = ({ value }) =>  {

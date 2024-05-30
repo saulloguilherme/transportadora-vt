@@ -15,19 +15,35 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Transportadora VT precisa do acesso a sua câmera."
+      },
+      "bundleIdentifier": "com.anonymous.transportadoravt"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "package": "com.anonymous.transportadoravt"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "react-native-vision-camera",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O aplicativo necessita do acesso à galeria.",
+          "cameraPermission": "O aplicativo necessita o acesso à câmera."
+        }
+      ]
     ]
   }
 }

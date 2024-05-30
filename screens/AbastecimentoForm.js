@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { View, Text, Pressable, TextInput, StyleSheet, Keyboard, FlatList, Button, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, Pressable, TextInput, StyleSheet, Keyboard, Button, KeyboardAvoidingView, Image, StatusBar } from 'react-native'
 import { StackActions } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+
 import TextInputField from '../components/TextInputField';
-import RadioComponent from '../components/RadioTwoOptions';
 import RadioTwoOptions from '../components/RadioTwoOptions';
 import NumericalInputField from '../components/NumericalInputField';
-
+import CameraModal from '../components/CameraModal';
 
 export default function AbastecimentoForm({ navigation }) {
   const toBack = () => navigation.dispatch(StackActions.pop());
@@ -57,14 +57,6 @@ export default function AbastecimentoForm({ navigation }) {
     valor: 2419.2,
   }]
 
-  const peopleList = [
-    { id: 1, name: "João Silva" },
-    { id: 2, name: "Maria Oliveira" },
-    { id: 3, name: "Pedro Santos" },
-    { id: 4, name: "Ana Souza" },
-    { id: 5, name: "Carlos Pereira" },
-  ];
-
   const [placa, setSelectedPlaca] = useState('');
   const [validPlaca, setValidPlaca] = useState(false);
 
@@ -78,26 +70,41 @@ export default function AbastecimentoForm({ navigation }) {
   const variacoes = ["Somente Diesel", "Diesel e Arla"]
   const [validDieselArla, setValidDieselArla] = useState(false);
 
-  const [diesel, setSelectedDiesel] = useState();
+  const [valorDiesel, setSelectedValorDiesel] = useState(0);
+  const [litrosDiesel, setSelectedLitrosDiesel] = useState(0);
   const [validDiesel, setValidDiesel] = useState(false);
 
-  const [arla, setSelectedArla] = useState();
+  const [valorArla, setSelectedValorArla] = useState(0);
+  const [litrosArla, setSelectedLitrosArla] = useState(0);
   const [validArla, setValidArla] = useState(false);
+  
+  const [image, setImage] = useState(null);
+  const [isCameraModalVisible, setCameraModalVisible] = useState(false);
 
   function allSelected() {
     return validPlaca && validPosto && validAutorizante && validDieselArla && validDiesel && (dieselArla == variacoes[1] ? validArla : true);
   };
 
   return (
-  <KeyboardAvoidingView behavior={"position"} enabled={() => {return false;}}>
+  <KeyboardAvoidingView behavior={"position"} enabled={false}>
     <View style={style.containter} onTouchStart={() => Keyboard.dismiss()}>
       <Text>{placa}{posto}{autorizante}{dieselArla}</Text>
       <TextInputField placeholder={"Digite a placa do veículo"} objectList={abastecimentoList} column={"placa"} setSelectedVariable={setSelectedPlaca} setValidVariable={setValidPlaca}></TextInputField>
       <TextInputField placeholder={"Digite o nome do posto"} objectList={abastecimentoList} column={"posto"} setSelectedVariable={setSelectedPosto} setValidVariable={setValidPosto}></TextInputField>
       <TextInputField placeholder={"Digite o autorizante do registro"} objectList={abastecimentoList} column={"autorizante"} setSelectedVariable={setSelectedAutorizante} setValidVariable={setValidAutorizante}></TextInputField>
       <RadioTwoOptions options={variacoes} setSelectedVariable={setSelectedDieselArla} setValidVariable={setValidDieselArla}></RadioTwoOptions>
-      <NumericalInputField placeholder={"Diesel"} variable={diesel} setSelectedVariable={setSelectedDiesel} setValidVariable={setValidDiesel}></NumericalInputField>
-      {dieselArla == variacoes[1] ? <NumericalInputField placeholder={"Arla"} variable={arla} setSelectedVariable={setSelectedArla} setValidVariable={setValidArla}></NumericalInputField> : null} 
+      <NumericalInputField placeholder={"Diesel"} setSelectedValue={setSelectedValorDiesel} SetSelectedLiters={setSelectedLitrosDiesel} setValidVariable={setValidDiesel}></NumericalInputField>
+      {dieselArla == variacoes[1] ? <NumericalInputField placeholder={"Arla"} setSelectedValue={setSelectedValorArla} SetSelectedLiters={setSelectedLitrosArla} setValidVariable={setValidArla}></NumericalInputField> : null} 
+
+      <View style={style.button_image}>
+        <Pressable onPress={() => setCameraModalVisible(true)}>
+          <Text>Adicionar Imagem</Text>  
+        </Pressable>
+      </View>
+      
+      {isCameraModalVisible ? <CameraModal setVisible={setCameraModalVisible} isVisible={isCameraModalVisible} setImage={setImage}/> : null}
+      {image ? <Image source={{ uri: image }} style={style.image} /> : null}
+
       <Pressable style={[style.enviar, allSelected() ? style.preenchido : style.nao_preenchido ]}> 
         <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Enviar</Text>  
       </Pressable>
@@ -130,5 +137,23 @@ const style = StyleSheet.create({
   nao_preenchido: {
     backgroundColor: "#ffffff",
     opacity: 0.4,
+  },
+  image: {
+    padding: 0,
+    margin: 0,
+    width: 150,
+    height: 200,
+    alignSelf: 'center',
+  },
+  button_image: {
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: "#f7f7f7",
+    width: "40%",
+    height: "8%",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: "center",
+    borderRadius: 40
   }
 })
