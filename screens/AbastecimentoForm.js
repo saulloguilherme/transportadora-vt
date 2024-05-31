@@ -142,7 +142,7 @@ const style = StyleSheet.create({
     padding: 0,
     margin: 0,
     width: 150,
-    height: 200,
+    height: 200 ,
     alignSelf: 'center',
   },
   button_image: {

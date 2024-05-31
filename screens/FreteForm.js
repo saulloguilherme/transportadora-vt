@@ -1,8 +1,11 @@
-import { View, Text, StyleSheet, Keyboard, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Keyboard, Pressable, Image } from 'react-native'
 import { StackActions } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import React, { useState } from 'react'
 import TextInputField from '../components/TextInputField';
+import TextInputFieldWithoutChoices from '../components/TextInputFieldWithoutChoices';
+import NumericalInputOneField from '../components/NumericalInputOneField';
+import CameraModal from '../components/CameraModal';
 
 export default function FreteForm({ navigation }) {
     const toBack = () => navigation.dispatch(StackActions.pop());
@@ -68,7 +71,11 @@ export default function FreteForm({ navigation }) {
   const [material, setSelectedMaterial] = useState('');
   const [validMaterial, setValidMaterial] = useState(false);
 
-  // TODO INSERIR INPUT DE TEXTO
+  const [peso, setSelectedPeso] = useState(0);
+  const [validPeso, setValidPeso] = useState(false);
+
+    const [image, setImage] = useState(null);
+  const [isCameraModalVisible, setCameraModalVisible] = useState(false);
 
   function allSelected() {
     return validPlaca && validTransportadora && validOrigem && validDestino && validMaterial;
@@ -79,10 +86,21 @@ export default function FreteForm({ navigation }) {
     <View style={style.containter} onTouchStart={() => Keyboard.dismiss()}>
       <Text>{placa}{transportadora}{origem}{destino}{material}</Text>
       <TextInputField placeholder={"Digite a placa do veículo"} objectList={freteList} column={"placa"} setSelectedVariable={setSelectedPlaca} setValidVariable={setValidPlaca}></TextInputField>
-      <TextInputField placeholder={"Digite a transportadora"} objectList={freteList} column={"transportadora"} setSelectedVariable={setSelectedTransportadora} setValidVariable={setValidTransportadora}></TextInputField>
-      <TextInputField placeholder={"Digite a origem"} objectList={freteList} column={"origem"} setSelectedVariable={setSelectedOrigem} setValidVariable={setValidOrigem}></TextInputField>
-      <TextInputField placeholder={"Digite o destino"} objectList={freteList} column={"destino"} setSelectedVariable={setSelectedDestino} setValidVariable={setValidDestino}></TextInputField>
-      <TextInputField placeholder={"Digite o material transportado"} objectList={freteList} column={"material"} setSelectedVariable={setSelectedMaterial} setValidVariable={setValidMaterial}></TextInputField>
+      <TextInputFieldWithoutChoices placeholder={"Digite a transportadora"} setSelectedVariable={setSelectedTransportadora} setValidVariable={setValidTransportadora}/>
+      <TextInputFieldWithoutChoices placeholder={"Digite a origem"} setSelectedVariable={setSelectedOrigem} setValidVariable={setValidOrigem}/>
+      <TextInputFieldWithoutChoices placeholder={"Digite o destino"} setSelectedVariable={setSelectedDestino} setValidVariable={setValidDestino}/>
+      <TextInputFieldWithoutChoices placeholder={"Digite o material transportado"} setSelectedVariable={setSelectedMaterial} setValidVariable={setValidMaterial} />
+      <NumericalInputOneField placeholder={"Peso da Carga"} setSelectedVariable={setSelectedPeso} setValidVariable={setValidPeso} />
+
+      <View style={style.button_image}>
+        <Pressable onPress={() => setCameraModalVisible(true)}>
+          <Text>Adicionar Imagem</Text>  
+        </Pressable>
+      </View>
+      
+      {isCameraModalVisible ? <CameraModal setVisible={setCameraModalVisible} isVisible={isCameraModalVisible} setImage={setImage}/> : null}
+      {image ? <Image source={{ uri: image }} style={style.image} /> : null}
+
       <Pressable style={[style.enviar, allSelected() ? style.preenchido : style.nao_preenchido ]}> 
         <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Enviar</Text>  
       </Pressable>
@@ -114,5 +132,23 @@ const style = StyleSheet.create({
   nao_preenchido: {
     backgroundColor: "#ffffff",
     opacity: 0.4,
+  },
+  image: {
+    padding: 0,
+    margin: 0,
+    width: 150,
+    height: 200 ,
+    alignSelf: 'center',
+  },
+  button_image: {
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: "#f7f7f7",
+    width: "40%",
+    height: "8%",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: "center",
+    borderRadius: 40
   }
 })
