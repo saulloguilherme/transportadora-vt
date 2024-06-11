@@ -38,10 +38,11 @@
       "expo-router",
       "react-native-vision-camera",
       [
-        "expo-image-picker",
+      "expo-camera",
         {
-          "photosPermission": "O aplicativo necessita do acesso à galeria.",
-          "cameraPermission": "O aplicativo necessita o acesso à câmera."
+          "cameraPermission": "Permita o aplicativo acessar a câmera.",
+          "microphonePermission": "Permita o aplicativo acessar o microfone.",
+          "recordAudioAndroid": true
         }
       ]
     ]

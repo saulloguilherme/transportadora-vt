@@ -1,27 +1,18 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 
-var Abastecimento = {
-    placa: "QEL 5117",
-    tipo: "Gasolina",
-    posto: "Petrocem",
-    valor: 2419.2,
-    data: "10/02/2023",
-    hora: "10:54"
-}
-
-export default function CardAbastecimento() {
+export default function CardAbastecimento({ Placa, Tipo, Posto, Valor, Data, Hora }) {
   return (
     <View style={styles.parentContainer}>
-        <Text style={styles.tempo}>{Abastecimento.data} - {Abastecimento.hora}</Text>
+        <Text style={styles.tempo}>{Data} - {Hora}</Text>
         <View style={styles.childContainer}>
             <Text style={styles.titulo}>Abastecimento Realizado</Text>
             <View style={styles.centralLine}>
-                <Text>{Abastecimento.placa}</Text>
-                <Text>{Abastecimento.tipo}</Text>
-                <Text>{Abastecimento.posto}</Text>
+                <Text>{Placa}</Text>
+                <Text>{Tipo}</Text>
+                <Text>{Posto}</Text>
             </View>
-            <Text style={styles.valor}>Valor Total: {Abastecimento.valor}</Text>
+            <Text style={styles.valor}>Valor Total: {Valor}</Text>
         </View>
     </View>
   )

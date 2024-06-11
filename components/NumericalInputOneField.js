@@ -85,7 +85,6 @@ const style = StyleSheet.create({
       justifyContent: 'center'
     },
     placeholder_text: {
-      fontWeight: "bold",
       fontSize: 20
     }
   })

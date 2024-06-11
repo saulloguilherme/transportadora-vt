@@ -1,14 +1,17 @@
+import React, { useCallback, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Keyboard, Pressable, Image } from 'react-native'
 import { StackActions } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import React, { useState } from 'react'
+
 import TextInputField from '../components/TextInputField';
 import TextInputFieldWithoutChoices from '../components/TextInputFieldWithoutChoices';
 import NumericalInputOneField from '../components/NumericalInputOneField';
 import CameraModal from '../components/CameraModal';
+import { supabase } from '../services/supabase';
 
 export default function FreteForm({ navigation }) {
     const toBack = () => navigation.dispatch(StackActions.pop());
+    
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -24,38 +27,21 @@ export default function FreteForm({ navigation }) {
         </Pressable>
       ),
     });
+  
   }, [navigation]);
 
-  const freteList = [{
-    id: 1,
-    placa: "QEL5117",
-    transportadora: "Ramos",
-    origem: "São Miguel",
-    destino: "Santana do Araguaia",
-    material: "Soja"
-  },{
-    id: 2,
-    placa: "QEP0117",
-    transportadora: "Concreta",
-    origem: "Belém",
-    destino: "Aracaju",
-    material: "Milho"
-  },{
-    id: 3,
-    placa: "QEK3117",
-    transportadora: "RDM",
-    origem: "Porto de Santos",
-    destino: "São Paulo",
-    material: "Calcario"
-  },{
-    id: 4,
-    placa: "REL5317",
-    transportadora: "Lutano",
-    origem: "Barcarena",
-    destino: "Bacabau",
-    material: "Minério"
-  },]
+  const [veiculosData, setVeiculosData] = useState([])
 
+  const getVeiculosData = async () => {
+    // const { data, error } = await supabase.from('veiculo').select();
+    // return data;
+  }
+
+  /*
+  useEffect(useCallback(()=>{
+    setVeiculosData(getVeiculosData())
+  }));
+*/
   const [placa, setSelectedPlaca] = useState('');
   const [validPlaca, setValidPlaca] = useState(false);
 
@@ -74,7 +60,7 @@ export default function FreteForm({ navigation }) {
   const [peso, setSelectedPeso] = useState(0);
   const [validPeso, setValidPeso] = useState(false);
 
-    const [image, setImage] = useState(null);
+  const [notaFiscal, setNotaFiscal] = useState("");
   const [isCameraModalVisible, setCameraModalVisible] = useState(false);
 
   function allSelected() {
@@ -85,7 +71,7 @@ export default function FreteForm({ navigation }) {
   return (
     <View style={style.containter} onTouchStart={() => Keyboard.dismiss()}>
       <Text>{placa}{transportadora}{origem}{destino}{material}</Text>
-      <TextInputField placeholder={"Digite a placa do veículo"} objectList={freteList} column={"placa"} setSelectedVariable={setSelectedPlaca} setValidVariable={setValidPlaca}></TextInputField>
+      <TextInputField placeholder={"Digite a placa do veículo"} objectList={veiculosData} column={"placa"} setSelectedVariable={setSelectedPlaca} setValidVariable={setValidPlaca}></TextInputField>
       <TextInputFieldWithoutChoices placeholder={"Digite a transportadora"} setSelectedVariable={setSelectedTransportadora} setValidVariable={setValidTransportadora}/>
       <TextInputFieldWithoutChoices placeholder={"Digite a origem"} setSelectedVariable={setSelectedOrigem} setValidVariable={setValidOrigem}/>
       <TextInputFieldWithoutChoices placeholder={"Digite o destino"} setSelectedVariable={setSelectedDestino} setValidVariable={setValidDestino}/>
@@ -94,12 +80,12 @@ export default function FreteForm({ navigation }) {
 
       <View style={style.button_image}>
         <Pressable onPress={() => setCameraModalVisible(true)}>
-          <Text>Adicionar Imagem</Text>  
+          <Text>Escanear QR Code</Text>  
         </Pressable>
       </View>
       
-      {isCameraModalVisible ? <CameraModal setVisible={setCameraModalVisible} isVisible={isCameraModalVisible} setImage={setImage}/> : null}
-      {image ? <Image source={{ uri: image }} style={style.image} /> : null}
+      {isCameraModalVisible ? <CameraModal setVisible={setCameraModalVisible} isVisible={isCameraModalVisible} setNotaFiscal={setNotaFiscal}/> : null}
+      {notaFiscal ? <Text style={{alignSelf: 'center'}}>{notaFiscal}</Text>: null}
 
       <Pressable style={[style.enviar, allSelected() ? style.preenchido : style.nao_preenchido ]}> 
         <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Enviar</Text>  

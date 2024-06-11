@@ -1,26 +1,17 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 
-var Frete = {
-    placa: "QEL 5117",
-    cidadeSaida: "Petrolina",
-    cidadeDestino: "Juazeiro",
-    peso: "700KG",
-    data: "10/02/2023",
-    hora: "10:54"
-}
-
-export default function CardFrete() {
+export default function CardFrete({ Placa, CidadeSaida, CidadeDestino, Peso, Data, Hora }) {
   return (
     <View style={styles.parentContainer}>
-        <Text style={styles.tempo}>{Frete.data} - {Frete.hora}</Text>
+        <Text style={styles.tempo}>{Data} - {Hora}</Text>
         <View style={styles.childContainer}>
             <Text style={styles.titulo}>Frete Realizado</Text>
             <View style={styles.centralLine}>
-                <Text>{Frete.cidadeSaida} {" > "} {Frete.cidadeDestino}</Text>
+                <Text>{CidadeSaida} {" > "} {CidadeDestino}</Text>
             </View>
             <View style={styles.ultimaLinha}>
-                <Text>{Frete.placa}</Text><Text>{Frete.peso}</Text>
+                <Text>{Placa}</Text><Text>{Peso}</Text>
             </View>
         </View>
     </View>

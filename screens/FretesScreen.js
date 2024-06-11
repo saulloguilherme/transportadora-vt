@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Text, View, Pressable, StyleSheet, ScrollView, StatusBar } from 'react-native';
 import { DrawerActions, StackActions } from '@react-navigation/native';
 
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import CardFrete from '../components/CardFrete';
 import AddButton from '../components/AddButton';
+
+import { supabase } from "../services/supabase"
 
 export default function FretesScreen({ navigation }) {
 
@@ -27,17 +29,39 @@ export default function FretesScreen({ navigation }) {
     navigation.dispatch(StackActions.push('FreteForm'))
   }
 
+  const fretes = [{
+    id: 1,
+    placa: "QEL 5117",
+    cidadeSaida: "Petrolina",
+    cidadeDestino: "Juazeiro",
+    peso: "700KG",
+    data: "10/02/2023",
+    hora: "10:54"
+}]
+
+  function renderCards() {
+    return (
+        fretes.map((frete) => (
+          <CardFrete key={frete.id} Placa={frete.placa} CidadeSaida={frete.cidadeSaida} CidadeDestino={frete.cidadeDestino} Peso={frete.peso} Data={frete.data} Hora={frete.hora} />
+          )
+        )
+    );
+  };
+
+  const getFretesData = async () => {
+    // const { data, error } = await supabase.from('frete').select();
+    // console.log(data)
+  }
+
+  useEffect(useCallback(()=>{
+    getFretesData();
+  }));
+
+
   return (
   <View style={styles.container}>
   <ScrollView style={{width:"100%"}}>
-    <CardFrete/>
-    <CardFrete/>
-    <CardFrete/>
-    <CardFrete/>
-    <CardFrete/>
-    <CardFrete/>
-    <CardFrete/>
-    <CardFrete/>
+    {renderCards()}
   </ScrollView>
 
   <View style={styles.button}>
